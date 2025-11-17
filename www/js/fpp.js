@@ -8878,6 +8878,7 @@ function scrollToTop () {
  * Uses the fppstats server to check if a new version is avaiable.
  */
 function checkForFppUpdate () {
+	return;
 	const epochTimeMilliseconds = Date.now();
 	$.get(
 		'https://fppstats.falconchristmas.com/api/fpp_commits?v=' +
