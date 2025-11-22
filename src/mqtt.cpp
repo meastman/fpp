@@ -307,7 +307,7 @@ void MosquittoClient::RegisterCallback(const std::string& topic) {
     LogDebug(VB_CONTROL, "MQTT: In AddCallback with %s\n", topic.c_str());
     callbackTopics.push_back(topic);
     if (m_canProcessMessages && m_isConnected) {
-        if (topic.rfind("/set/", 0) != 0) {
+        if (topic.rfind("/set/", 0) != 0 && !topic.starts_with('!')) {
             // we are registered on all "/set/" already, no need to re-register
             std::string tp = m_baseTopic + topic;
             LogDebug(VB_CONTROL, "MQTT: Preparing to Subscribe to %s\n", tp.c_str());
@@ -461,6 +461,7 @@ void MosquittoClient::MessageCallback(void* obj, const struct mosquitto_message*
 
     LogDebug(VB_CONTROL, "No match found for Mosquitto topic '%s'. Assuming it is an additional subscribe topic\n",
             message->topic);
+    Events::InvokeCallback("!" + std::string(topic), topic, payload);
 }
 
 void MosquittoClient::CacheSetMessage(std::string& topic, std::string& message) {
